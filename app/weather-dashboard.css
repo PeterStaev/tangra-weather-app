@@ -1,0 +1,53 @@
+#current-condition-container
+{
+    padding-top: 10;
+    orientation: horizontal;
+    horizontal-align: center;
+}
+
+#degree-symbol
+{
+    font-size: 70;
+    vertical-align: top;
+}
+
+#current-condition-summary
+{
+    horizontal-align: center;
+    font-size: 25;
+    margin-bottom: 10;
+}
+
+.metric-symbol
+{
+    font-size: 30;
+    horizontal-align: center;
+}
+
+.current-condition-detail
+{
+    background-color: rgba(150, 150, 150, 0.3);
+    margin: 2;
+    text-align: center;
+    opacity: 0;
+    
+    animation-duration: 2s;
+    animation-name: fadein;
+}
+
+.current-condition-detail-icon
+{
+    font-size: 40;
+}
+
+.current-condition-detail-text
+{
+    font-size: 20;
+
+}
+
+@keyframes fadein
+{
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

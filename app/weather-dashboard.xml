@@ -1,0 +1,44 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+    <GridLayout rows="100, auto, auto, auto, *" columns="*, *, *">
+        <StackLayout id="current-condition-container" row="0" col="0" colspan="3">
+            <AbsoluteLayout verticalAlignment="middle">
+                <Label class="ff" text="{{ conditionIcon1Text }}"  color="{{ conditionIcon1Color }}" fontSize="{{ conditionFontSize }}" />
+                <Label class="ff" text="{{ conditionIcon2Text }}"  color="{{ conditionIcon2Color }}" fontSize="{{ conditionFontSize }}" />
+            </AbsoluteLayout>
+            <Label text="{{ currentTemperature }}" fontSize="80" />
+            <Label id="degree-symbol"  class="wi" text="&#xf042;" />
+            <StackLayout verticalAlignment="top" paddingTop="10">
+                <Label class="metric-symbol" text="F" />
+                <Label class="metric-symbol" text="C" color="#999999" />
+            </StackLayout>
+        </StackLayout>
+       
+        <Label id="current-condition-summary" row="1" col="0" colspan="3" text="{{ currentConditionSummary }}" />
+        
+        <StackLayout class="current-condition-detail" row="2" col="0" marginLeft="4">
+            <Label class="wi current-condition-detail-icon" text="&#xf07a;" />
+            <Label class="current-condition-detail-text" text="{{ currentHumidity }}" />
+        </StackLayout> 
+        <StackLayout class="current-condition-detail" row="2" col="1">
+            <Label class="wi current-condition-detail-icon" text="&#xf079;" />
+            <Label class="current-condition-detail-text" text="{{ currentPressure }}" />
+        </StackLayout> 
+        <StackLayout class="current-condition-detail" row="2" col="2" marginRight="4">
+            <Label class="wi current-condition-detail-icon" text="&#xf0b1;" rotate="{{ currentWindBearing }}" />
+            <Label class="current-condition-detail-text" text="{{ currentWindSpeed }}" />
+        </StackLayout> 
+
+        <StackLayout class="current-condition-detail" row="3" col="0" marginLeft="4">
+            <Label class="wi current-condition-detail-icon" text="&#xf051;" />
+            <Label class="current-condition-detail-text" text="{{ sunriseTime }}" />
+        </StackLayout> 
+        <StackLayout class="current-condition-detail" row="3" col="1">
+            <Label class="wi current-condition-detail-icon" text="&#xf052;" />
+            <Label class="current-condition-detail-text" text="{{ sunsetTime }}" />
+        </StackLayout> 
+        <StackLayout class="current-condition-detail" row="3" col="2" marginRight="4">
+            <Label class="wi current-condition-detail-icon" text="{{ moonPhaseIcon }}" fontSize="30" />
+            <Label class="current-condition-detail-text" text="{{ moonPhaseText }}" textWrap="true" fontSize="15"  marginTop="0"/>
+        </StackLayout> 
+    </GridLayout>
+</Page>

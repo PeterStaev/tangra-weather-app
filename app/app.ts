@@ -1,2 +1,2 @@
 ﻿import application = require("application");
-application.start({ moduleName: "main-page" });
+application.start({ moduleName: "weather-dashboard" });
