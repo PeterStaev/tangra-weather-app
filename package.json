@@ -13,8 +13,10 @@
     }
   },
   "dependencies": {
-    "tns-core-modules": "2.0.1",
-    "moment": "2.13.0"
+    "moment": "2.13.0",
+    "nativescript-status-bar": "^1.0.1",
+    "nativescript-telerik-ui-pro": "file:../nativescript-ui-pro.tgz",
+    "tns-core-modules": "2.0.1"
   },
   "devDependencies": {
     "babel-traverse": "6.9.0",
@@ -23,7 +25,6 @@
     "filewalker": "0.1.2",
     "lazy": "1.0.11",
     "nativescript-dev-typescript": "^0.3.0",
-    "nativescript-telerik-ui-pro": "file:../nativescript-ui-pro.tgz",
     "typescript": "^1.8.10"
   }
 }

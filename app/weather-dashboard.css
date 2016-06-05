@@ -18,6 +18,67 @@
     margin-bottom: 10;
 }
 
+.clear-day
+{
+    background-image: url('~/images/clear-day.jpg');
+    background-size: cover;
+    background-position: right;
+}
+.clear-night
+{
+    background-image: url('~/images/clear-night.jpg');
+    background-size: cover;
+    background-position: left;
+}
+.rain
+{
+    background-image: url('~/images/rain.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.snow
+{
+    background-image: url('~/images/snow.jpg');
+    background-size: cover;
+    background-position: left;
+}
+.sleet
+{
+    background-image: url('~/images/sleet.jpg');
+    background-size: cover;
+    background-position: left;
+}
+.wind
+{
+    background-image: url('~/images/wind.jpg');
+    background-size: cover;
+    background-position: left;
+}
+.fog
+{
+    background-image: url('~/images/fog.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.cloudy
+{
+    background-image: url('~/images/cloudy.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.partly-cloudy-day
+{
+    background-image: url('~/images/partly-cloudy-day.jpg');
+    background-size: cover;
+    background-position: right;
+}
+.partly-cloudy-night
+{
+    background-image: url('~/images/partly-cloudy-night.jpg');
+    background-size: cover;
+    background-position: right;
+}
+
 .metric-symbol
 {
     font-size: 30;
@@ -44,6 +105,15 @@
 {
     font-size: 20;
 
+}
+
+#daily-forecast-container
+{
+    background-color: rgba(150, 150, 150, 0.3);
+    margin: 2, 4, 2, 4;
+    
+    animation-duration: 2s;
+    animation-name: fadein;
 }
 
 @keyframes fadein

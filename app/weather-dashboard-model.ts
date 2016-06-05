@@ -76,6 +76,19 @@ let units: { [unitSystem: string]: IUnitSymbol } = {
     }
 };
 
+let conditionIcons: { [condition: string]: string } = {
+    "clear-day": "\uf00d", 
+    "clear-night": "\uf02e", 
+    "rain": "\uf019", 
+    "snow": "\uf01b", 
+    "sleet": "\uf0b5", 
+    "wind": "\uf050", 
+    "fog": "\uf014", 
+    "cloudy": "\uf013", 
+    "partly-cloudy-day": "\uf002", 
+    "partly-cloudy-night": "\uf086"
+};
+
 export class WeatherDashboardModel extends observable.Observable {
     
     constructor() {
@@ -90,6 +103,7 @@ export class WeatherDashboardModel extends observable.Observable {
         let unitSymbol: IUnitSymbol = units[this.get("unitSystem")];
         let currentDailyData = data.daily.data[0];
         
+        this.set("currentCondition", data.currently.icon);
         if (currentConditionIcon) {
             this.set("conditionIcon1Text", currentConditionIcon.icon1.text);
             this.set("conditionIcon1Color", currentConditionIcon.icon1.color);
@@ -107,6 +121,14 @@ export class WeatherDashboardModel extends observable.Observable {
         this.set("sunsetTime", moment.unix(currentDailyData.sunsetTime).format("h:mm A"));
         this.set("moonPhaseText", this._getMoonPhaseText(currentDailyData.moonPhase));
         this.set("moonPhaseIcon", String.fromCharCode(61589 + Math.round(28 * currentDailyData.moonPhase)));
+        this.set("daily", data.daily.data.map((item) => { 
+            return {
+                temperatureMin: Math.round(item.temperatureMin), 
+                temperatureMax: Math.round(item.temperatureMax), 
+                icon: conditionIcons[item.icon],
+                day: moment.unix(item.time).format("MM/DD")
+            };
+        }));
     }
     
     private _getMoonPhaseText(moonPhase: number) {

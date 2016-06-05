@@ -1,5 +1,6 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
-    <GridLayout rows="100, auto, auto, auto, *" columns="*, *, *">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:chart="nativescript-telerik-ui-pro/chart" navigatingTo="navigatingTo">
+    <GridLayout rows="100, auto, auto, auto, *" columns="*, *, *" class="{{ currentCondition }}">
+        <!--<Image row="0" col="0" rowspan="5" colspan="3" src="{{ currentCondition, '~/images/' + currentCondition + '.jpg' }}" stretch="aspectFill" />-->
         <StackLayout id="current-condition-container" row="0" col="0" colspan="3">
             <AbsoluteLayout verticalAlignment="middle">
                 <Label class="ff" text="{{ conditionIcon1Text }}"  color="{{ conditionIcon1Color }}" fontSize="{{ conditionFontSize }}" />
@@ -40,5 +41,61 @@
             <Label class="wi current-condition-detail-icon" text="{{ moonPhaseIcon }}" fontSize="30" />
             <Label class="current-condition-detail-text" text="{{ moonPhaseText }}" textWrap="true" fontSize="15"  marginTop="0"/>
         </StackLayout> 
+        
+        <GridLayout id="daily-forecast-container" row="4" col="0" colspan="3" rows="auto, *">
+            <Label row="0" text="Daily Forecast" fontSize="20" margin="5" />
+            <chart:RadCartesianChart row="1" backgroundColor="transparent">
+
+                <chart:RadCartesianChart.verticalAxis>
+                    <chart:LinearAxis horizontalLocation="Left" lineColor="#FEFEFE" lineHidden="true" labelFormat="%.0f&#176;" labelTextColor="#FEFEFE" />
+                </chart:RadCartesianChart.verticalAxis>
+
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:CategoricalAxis verticalLocation="Bottom" lineColor="#FEFEFE" labelMargin="5" labelTextColor="#FEFEFE" />
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:RangeBarSeries
+                        showLabels="true"
+                        items="{{ daily }}"
+                        categoryProperty="day"
+                        lowPropertyName="temperatureMin"
+                        highPropertyName="temperatureMax">
+                        <chart:RangeBarSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i&#176;" />
+                        </chart:RangeBarSeries.labelStyle>
+                    </chart:RangeBarSeries>
+                    
+                    <chart:LineSeries 
+                        seriesName="Icon" 
+                        showLabels="true"
+                        items="{{ daily }}" 
+                        categoryProperty="day" 
+                        valueProperty="icon">
+                        <chart:LineSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textSize="20" fontName="Weather Icons" />
+                        </chart:LineSeries.labelStyle>
+                    </chart:LineSeries>
+                </chart:RadCartesianChart.series>
+                
+                <chart:RadCartesianChart.palettes>
+                    <chart:Palette seriesName="Icon">
+                        <chart:Palette.entries>
+                            <chart:PaletteEntry  strokeWidth="0"/>
+                        </chart:Palette.entries>
+                    </chart:Palette>
+                </chart:RadCartesianChart.palettes>
+                
+            </chart:RadCartesianChart>
+        </GridLayout>
     </GridLayout>
 </Page>
