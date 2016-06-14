@@ -1,6 +1,5 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:chart="nativescript-telerik-ui-pro/chart" navigatingTo="navigatingTo">
     <GridLayout rows="100, auto, auto, auto, *" columns="*, *, *" class="{{ currentCondition }}">
-        <!--<Image row="0" col="0" rowspan="5" colspan="3" src="{{ currentCondition, '~/images/' + currentCondition + '.jpg' }}" stretch="aspectFill" />-->
         <StackLayout id="current-condition-container" row="0" col="0" colspan="3">
             <AbsoluteLayout verticalAlignment="middle">
                 <Label class="ff" text="{{ conditionIcon1Text }}"  color="{{ conditionIcon1Color }}" fontSize="{{ conditionFontSize }}" />
@@ -9,8 +8,8 @@
             <Label text="{{ currentTemperature }}" fontSize="80" />
             <Label id="degree-symbol"  class="wi" text="&#xf042;" />
             <StackLayout verticalAlignment="top" paddingTop="10">
-                <Label class="metric-symbol" text="F" />
-                <Label class="metric-symbol" text="C" color="#999999" />
+                <Label class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'F' : 'C' }}" />
+                <Button class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'C' : 'F' }}" color="#999999" backgroundColor="transparent" tap="switchUnitSystem" />
             </StackLayout>
         </StackLayout>
        
@@ -18,40 +17,57 @@
         
         <StackLayout class="current-condition-detail" row="2" col="0" marginLeft="4">
             <Label class="wi current-condition-detail-icon" text="&#xf07a;" />
-            <Label class="current-condition-detail-text" text="{{ currentHumidity }}" />
+            <Label id="current-humidity" class="current-condition-detail-text" text="{{ currentHumidity }}" />
         </StackLayout> 
         <StackLayout class="current-condition-detail" row="2" col="1">
             <Label class="wi current-condition-detail-icon" text="&#xf079;" />
-            <Label class="current-condition-detail-text" text="{{ currentPressure }}" />
+            <Label id="current-pressure" class="current-condition-detail-text" text="{{ currentPressure }}" />
         </StackLayout> 
         <StackLayout class="current-condition-detail" row="2" col="2" marginRight="4">
             <Label class="wi current-condition-detail-icon" text="&#xf0b1;" rotate="{{ currentWindBearing }}" />
-            <Label class="current-condition-detail-text" text="{{ currentWindSpeed }}" />
+            <Label id="current-wind-speed" class="current-condition-detail-text" text="{{ currentWindSpeed }}" />
         </StackLayout> 
 
         <StackLayout class="current-condition-detail" row="3" col="0" marginLeft="4">
             <Label class="wi current-condition-detail-icon" text="&#xf051;" />
-            <Label class="current-condition-detail-text" text="{{ sunriseTime }}" />
+            <Label id="sunrise-time" class="current-condition-detail-text" text="{{ sunriseTime | dateFormat('h:mm A') }}" />
         </StackLayout> 
         <StackLayout class="current-condition-detail" row="3" col="1">
             <Label class="wi current-condition-detail-icon" text="&#xf052;" />
-            <Label class="current-condition-detail-text" text="{{ sunsetTime }}" />
+            <Label id="sunset-time" class="current-condition-detail-text" text="{{ sunsetTime | dateFormat('h:mm A') }}" />
         </StackLayout> 
         <StackLayout class="current-condition-detail" row="3" col="2" marginRight="4">
             <Label class="wi current-condition-detail-icon" text="{{ moonPhaseIcon }}" fontSize="30" />
-            <Label class="current-condition-detail-text" text="{{ moonPhaseText }}" textWrap="true" fontSize="15"  marginTop="0"/>
+            <Label id="moon-phase-text" class="current-condition-detail-text" text="{{ moonPhaseText }}" textWrap="true" fontSize="15"  marginTop="0"/>
         </StackLayout> 
         
-        <GridLayout id="daily-forecast-container" row="4" col="0" colspan="3" rows="auto, *">
+        <GridLayout id="daily-forecast-container" row="4" col="0" colspan="3" rows="auto, auto, *">
             <Label row="0" text="Daily Forecast" fontSize="20" margin="5" />
-            <chart:RadCartesianChart row="1" backgroundColor="transparent">
-
+            <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
+                <SegmentedBarItem title="Temperature" />
+                <SegmentedBarItem title="Precipitation" />
+                <SegmentedBarItem title="Humidity" />
+            </SegmentedBar> 
+                   
+            <chart:RadCartesianChart row="2" pointSelected="onPointSelected" class="{{ selectedChartIndex === 0 ? 'fadein-chart' : 'fadeout-chart' }}">
                 <chart:RadCartesianChart.verticalAxis>
-                    <chart:LinearAxis horizontalLocation="Left" lineColor="#FEFEFE" lineHidden="true" labelFormat="%.0f&#176;" labelTextColor="#FEFEFE" />
+                    <chart:LinearAxis 
+                        horizontalLocation="Left" 
+                        lineColor="#FEFEFE" 
+                        lineHidden="true" 
+                        labelFormat="%.0f&#176;" 
+                        labelTextColor="#FEFEFE" />
                 </chart:RadCartesianChart.verticalAxis>
 
                 <chart:RadCartesianChart.horizontalAxis>
-                    <chart:CategoricalAxis verticalLocation="Bottom" lineColor="#FEFEFE" labelMargin="5" labelTextColor="#FEFEFE" />
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="MM/dd" 
+                        dateTimeComponent="Day" 
+                        labelFitMode="Rotate" /> 
                 </chart:RadCartesianChart.horizontalAxis>
                 
                 <chart:RadCartesianChart.grid>
@@ -69,7 +85,8 @@
                         items="{{ daily }}"
                         categoryProperty="day"
                         lowPropertyName="temperatureMin"
-                        highPropertyName="temperatureMax">
+                        highPropertyName="temperatureMax"
+                        selectionMode="DataPoint">
                         <chart:RangeBarSeries.labelStyle>
                             <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i&#176;" />
                         </chart:RangeBarSeries.labelStyle>
@@ -94,8 +111,304 @@
                         </chart:Palette.entries>
                     </chart:Palette>
                 </chart:RadCartesianChart.palettes>
-                
             </chart:RadCartesianChart>
+            
+            <chart:RadCartesianChart row="2" pointSelected="onPointSelected" class="{{ selectedChartIndex === 1 ? 'fadein-chart' : 'fadeout-chart' }}">
+                <chart:RadCartesianChart.legend>
+                    <chart:RadLegendView position="Floating" />
+                </chart:RadCartesianChart.legend>
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="MM/dd" 
+                        dateTimeComponent="Day" 
+                        labelFitMode="Rotate" 
+                        allowPan="true" /> 
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:BarSeries
+                        showLabels="true"
+                        items="{{ daily }}"
+                        categoryProperty="day"
+                        valueProperty="precipIntensity"
+                        selectionMode="DataPoint"
+                        legendTitle="Intensity"
+                        >
+                        <chart:BarSeries.verticalAxis>
+                            <chart:LinearAxis 
+                                horizontalLocation="Right" 
+                                lineColor="#FEFEFE" 
+                                lineHidden="true" 
+                                labelFormat="%.1fmm/h"
+                                labelTextColor="#FEFEFE"
+                                labelLayoutMode="Outside"/>
+                        </chart:BarSeries.verticalAxis>
+                        <chart:BarSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%.2f" />
+                        </chart:BarSeries.labelStyle>
+                    </chart:BarSeries>                    
+                    <chart:LineSeries
+                        showLabels="true"
+                        seriesName="Probability"
+                        items="{{ daily }}"
+                        categoryProperty="day"
+                        valueProperty="precipProbability"
+                        selectionMode="DataPoint"
+                        legendTitle="Probability"
+                        >
+                        <chart:LineSeries.verticalAxis>
+                            <chart:LinearAxis 
+                                horizontalLocation="Left" 
+                                lineColor="#FEFEFE" 
+                                lineHidden="true" 
+                                labelTextColor="#FEFEFE"
+                                labelLayoutMode="Outside"
+                                minimum="0"
+                                maximum="100" />
+                        </chart:LineSeries.verticalAxis>
+                        <chart:LineSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%.0f%%" />
+                        </chart:LineSeries.labelStyle>
+                    </chart:LineSeries>
+                </chart:RadCartesianChart.series>
+                
+                <chart:RadCartesianChart.palettes>
+                    <chart:Palette seriesName="Probability">
+                        <chart:Palette.entries>
+                            <chart:PaletteEntry strokeColor="#4070FF"/>
+                        </chart:Palette.entries>
+                    </chart:Palette>
+                </chart:RadCartesianChart.palettes>
+            </chart:RadCartesianChart>
+            
+            <chart:RadCartesianChart row="2" pointSelected="onPointSelected" class="{{ selectedChartIndex === 2 ? 'fadein-chart' : 'fadeout-chart' }}">
+                <chart:RadCartesianChart.verticalAxis>
+                    <chart:LinearAxis 
+                        horizontalLocation="Left" 
+                        lineColor="#FEFEFE" 
+                        lineHidden="true" 
+                        labelFormat="%.0f%%" 
+                        labelTextColor="#FEFEFE"/>
+                </chart:RadCartesianChart.verticalAxis>
+
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="MM/dd" 
+                        dateTimeComponent="Day" 
+                        labelFitMode="Rotate" /> 
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:AreaSeries
+                        showLabels="true"
+                        items="{{ daily }}"
+                        categoryProperty="day"
+                        valueProperty="humidity"
+                        selectionMode="DataPoint">
+                        <chart:AreaSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%.0f%%" />
+                        </chart:AreaSeries.labelStyle>
+                    </chart:AreaSeries>
+
+                </chart:RadCartesianChart.series>
+            </chart:RadCartesianChart>
+        </GridLayout>
+        
+        <GridLayout id="hourly-forecast-container" row="4" col="0" colspan="3" rows="auto, auto, *" opacity="0" scaleX="0" scaleY="0" pinch="hourlyContainerZoomed" doubleTap="switchToDailyChart">
+            <Label row="0" text="{{ currentDay, 'Hourly forecast for ' + dateFormat(currentDay, 'dddd') }}" fontSize="20" margin="5" />
+            <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
+                <SegmentedBarItem title="Temperature" />
+                <SegmentedBarItem title="Precipitation" />
+                <SegmentedBarItem title="Humidity" />
+            </SegmentedBar> 
+            
+            <chart:RadCartesianChart id="hourly-temperature-chart" row="2" class="{{ selectedChartIndex === 0 ? 'fadein-chart' : 'fadeout-chart' }}">
+                <chart:RadCartesianChart.verticalAxis>
+                    <chart:LinearAxis 
+                        horizontalLocation="Left" 
+                        lineColor="#FEFEFE" 
+                        lineHidden="true" 
+                        labelFormat="%.0f&#176;" 
+                        labelTextColor="#FEFEFE" />
+                </chart:RadCartesianChart.verticalAxis>
+
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="ha" 
+                        dateTimeComponent="Hour" 
+                        labelFitMode="Rotate"  
+                        allowPan="true" /> 
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:AreaSeries
+                        showLabels="true"
+                        items="{{ hourly }}"
+                        categoryProperty="time"
+                        valueProperty="temperature">
+                        <chart:AreaSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i&#176;" />
+                        </chart:AreaSeries.labelStyle>
+                    </chart:AreaSeries>
+                </chart:RadCartesianChart.series>
+            </chart:RadCartesianChart>
+
+            <chart:RadCartesianChart id="hourly-precipiation-chart" row="2" class="{{ selectedChartIndex === 1 ? 'fadein-chart' : 'fadeout-chart' }}">
+                <chart:RadCartesianChart.legend>
+                    <chart:RadLegendView position="Floating" />
+                </chart:RadCartesianChart.legend>
+
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="ha" 
+                        dateTimeComponent="Hour" 
+                        labelFitMode="Rotate" 
+                        allowPan="true" /> 
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:BarSeries
+                        items="{{ hourly }}"
+                        categoryProperty="time"
+                        valueProperty="precipIntensity"
+                        legendTitle="Intensity"
+                        >
+                        <chart:BarSeries.verticalAxis>
+                            <chart:LinearAxis 
+                                horizontalLocation="Right" 
+                                lineColor="#FEFEFE" 
+                                lineHidden="true" 
+                                labelFormat="%.1fmm/h"
+                                labelTextColor="#FEFEFE"
+                                labelLayoutMode="Outside"/>
+                        </chart:BarSeries.verticalAxis>
+                    </chart:BarSeries>                    
+                    <chart:LineSeries
+                        seriesName="Probability"
+                        items="{{ hourly }}"
+                        categoryProperty="time"
+                        valueProperty="precipProbability"
+                        legendTitle="Probability"
+                        >
+                        <chart:LineSeries.verticalAxis>
+                            <chart:LinearAxis 
+                                horizontalLocation="Left" 
+                                lineColor="#FEFEFE" 
+                                lineHidden="true" 
+                                labelFormat="%.0f%%" 
+                                labelTextColor="#FEFEFE"
+                                labelLayoutMode="Outside"
+                                minimum="0"
+                                maximum="100" />
+                        </chart:LineSeries.verticalAxis>
+                    </chart:LineSeries>
+                </chart:RadCartesianChart.series>
+                
+                <chart:RadCartesianChart.palettes>
+                    <chart:Palette seriesName="Probability">
+                        <chart:Palette.entries>
+                            <chart:PaletteEntry strokeColor="#4070FF"/>
+                        </chart:Palette.entries>
+                    </chart:Palette>
+                </chart:RadCartesianChart.palettes>
+            </chart:RadCartesianChart>
+
+            <chart:RadCartesianChart id="hourly-humidity-chart" row="2" class="{{ selectedChartIndex === 2 ? 'fadein-chart' : 'fadeout-chart' }}">
+                <chart:RadCartesianChart.verticalAxis>
+                    <chart:LinearAxis 
+                        horizontalLocation="Left" 
+                        lineColor="#FEFEFE" 
+                        lineHidden="true" 
+                        labelFormat="%.0f%%" 
+                        labelTextColor="#FEFEFE"/>
+                </chart:RadCartesianChart.verticalAxis>
+
+                <chart:RadCartesianChart.horizontalAxis>
+                    <chart:DateTimeCategoricalAxis 
+                        verticalLocation="Bottom" 
+                        lineColor="#FEFEFE" 
+                        labelMargin="5" 
+                        labelTextColor="#FEFEFE" 
+                        dateFormat="ha" 
+                        dateTimeComponent="Hour" 
+                        labelFitMode="Rotate" 
+                        allowPan="true" /> 
+                </chart:RadCartesianChart.horizontalAxis>
+                
+                <chart:RadCartesianChart.grid>
+                    <chart:RadCartesianChartGrid
+                        verticalLinesVisible="false"
+                        horizontalStrokeColor="#FFFEFEFE"
+                        verticalStripLinesVisible="false"
+                        horizontalStripLinesVisible="false"
+                        />
+                </chart:RadCartesianChart.grid>
+        
+                <chart:RadCartesianChart.series>
+                    <chart:AreaSeries
+                        showLabels="true"
+                        items="{{ hourly }}"
+                        categoryProperty="time"
+                        valueProperty="humidity">
+                        <chart:AreaSeries.labelStyle>
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%.0f%%" />
+                        </chart:AreaSeries.labelStyle>
+                    </chart:AreaSeries>
+
+                </chart:RadCartesianChart.series>
+            </chart:RadCartesianChart>            
         </GridLayout>
     </GridLayout>
 </Page>
