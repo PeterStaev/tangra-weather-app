@@ -1,6 +1,12 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:chart="nativescript-telerik-ui-pro/chart" navigatingTo="navigatingTo">
-    <GridLayout rows="100, auto, auto, auto, *" columns="*, *, *" class="{{ currentCondition }}">
-        <StackLayout id="current-condition-container" row="0" col="0" colspan="3">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:chart="nativescript-telerik-ui-pro/chart" class="{{ currentCondition }}" navigatingTo="navigatingTo">
+    <GridLayout rows="30, 80, auto, auto, auto, *, auto" columns="*, *, *">
+        <GridLayout row="0" col="0" colspan="3">
+            <Label id="city-label" text="{{ city }}" />
+            <Button text="&#xf04c;" class="wi refresh-button" visibility="{{ isLoadingIn, isLoadingIn ? 'collapsed' : 'visible' }}" tap="refreshData" />
+            <Label text="&#xf00d;" class="wi refresh-button spinning-sun" visibility="{{ isLoadingIn, isLoadingIn ? 'visible' : 'collapsed' }}" />
+        </GridLayout>
+        
+        <StackLayout id="current-condition-container" row="1" col="0" colspan="3">
             <AbsoluteLayout verticalAlignment="middle">
                 <Label class="ff" text="{{ conditionIcon1Text }}"  color="{{ conditionIcon1Color }}" fontSize="{{ conditionFontSize }}" />
                 <Label class="ff" text="{{ conditionIcon2Text }}"  color="{{ conditionIcon2Color }}" fontSize="{{ conditionFontSize }}" />
@@ -13,35 +19,35 @@
             </StackLayout>
         </StackLayout>
        
-        <Label id="current-condition-summary" row="1" col="0" colspan="3" text="{{ currentConditionSummary }}" />
+        <Label id="current-condition-summary" row="2" col="0" colspan="3" text="{{ currentConditionSummary }}" />
         
-        <StackLayout class="current-condition-detail" row="2" col="0" marginLeft="4">
+        <StackLayout class="current-condition-detail" row="3" col="0" marginLeft="4">
             <Label class="wi current-condition-detail-icon" text="&#xf07a;" />
             <Label id="current-humidity" class="current-condition-detail-text" text="{{ currentHumidity }}" />
         </StackLayout> 
-        <StackLayout class="current-condition-detail" row="2" col="1">
+        <StackLayout class="current-condition-detail" row="3" col="1">
             <Label class="wi current-condition-detail-icon" text="&#xf079;" />
             <Label id="current-pressure" class="current-condition-detail-text" text="{{ currentPressure }}" />
         </StackLayout> 
-        <StackLayout class="current-condition-detail" row="2" col="2" marginRight="4">
+        <StackLayout class="current-condition-detail" row="3" col="2" marginRight="4">
             <Label class="wi current-condition-detail-icon" text="&#xf0b1;" rotate="{{ currentWindBearing }}" />
             <Label id="current-wind-speed" class="current-condition-detail-text" text="{{ currentWindSpeed }}" />
         </StackLayout> 
 
-        <StackLayout class="current-condition-detail" row="3" col="0" marginLeft="4">
+        <StackLayout class="current-condition-detail" row="4" col="0" marginLeft="4">
             <Label class="wi current-condition-detail-icon" text="&#xf051;" />
             <Label id="sunrise-time" class="current-condition-detail-text" text="{{ sunriseTime | dateFormat('h:mm A') }}" />
         </StackLayout> 
-        <StackLayout class="current-condition-detail" row="3" col="1">
+        <StackLayout class="current-condition-detail" row="4" col="1">
             <Label class="wi current-condition-detail-icon" text="&#xf052;" />
             <Label id="sunset-time" class="current-condition-detail-text" text="{{ sunsetTime | dateFormat('h:mm A') }}" />
         </StackLayout> 
-        <StackLayout class="current-condition-detail" row="3" col="2" marginRight="4">
+        <StackLayout class="current-condition-detail" row="4" col="2" marginRight="4">
             <Label class="wi current-condition-detail-icon" text="{{ moonPhaseIcon }}" fontSize="30" />
             <Label id="moon-phase-text" class="current-condition-detail-text" text="{{ moonPhaseText }}" textWrap="true" fontSize="15"  marginTop="0"/>
         </StackLayout> 
         
-        <GridLayout id="daily-forecast-container" row="4" col="0" colspan="3" rows="auto, auto, *">
+        <GridLayout id="daily-forecast-container" row="5" col="0" colspan="3" rows="auto, auto, *">
             <Label row="0" text="Daily Forecast" fontSize="20" margin="5" />
             <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
                 <SegmentedBarItem title="Temperature" />
@@ -240,7 +246,7 @@
             </chart:RadCartesianChart>
         </GridLayout>
         
-        <GridLayout id="hourly-forecast-container" row="4" col="0" colspan="3" rows="auto, auto, *" opacity="0" scaleX="0" scaleY="0" pinch="hourlyContainerZoomed" doubleTap="switchToDailyChart">
+        <GridLayout id="hourly-forecast-container" row="5" col="0" colspan="3" rows="auto, auto, *" opacity="0" scaleX="0" scaleY="0" pinch="hourlyContainerZoomed" doubleTap="switchToDailyChart">
             <Label row="0" text="{{ currentDay, 'Hourly forecast for ' + dateFormat(currentDay, 'dddd') }}" fontSize="20" margin="5" />
             <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
                 <SegmentedBarItem title="Temperature" />
@@ -410,5 +416,7 @@
                 </chart:RadCartesianChart.series>
             </chart:RadCartesianChart>            
         </GridLayout>
+        
+        <Label row="7" col="0" colspan="3" text="Data from Forecast.io" marginLeft="4" fontSize="10" />
     </GridLayout>
 </Page>

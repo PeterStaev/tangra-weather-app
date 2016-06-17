@@ -1,7 +1,5 @@
 import { EventData } from "data/observable";
-import { Page } from "ui/page";
-import { WeatherDashboardModel } from "./weather-dashboard-model";
-import * as statusBar from "nativescript-status-bar";
+import { Page, NavigatedData } from "ui/page";
 import { ChartEventData, RadCartesianChart } from "nativescript-telerik-ui-pro/chart";
 import * as frame from "ui/frame";
 import { GestureStateTypes, PinchGestureEventData } from "ui/gestures";
@@ -9,8 +7,10 @@ import { SelectedIndexChangedEventData } from "ui/segmented-bar";
 import { GridLayout } from "ui/layouts/grid-layout";
 import { Animation, AnimationDefinition } from "ui/animation";
 import { View } from "ui/core/view";
+import * as geolocation from "nativescript-geolocation";
+import { WeatherDashboardModel } from "./weather-dashboard-model";
 
-let model = new WeatherDashboardModel();
+let model: WeatherDashboardModel;
 
 let hourlyContainer: GridLayout;
 let dailyContainer: GridLayout;
@@ -23,12 +23,12 @@ let zoomInDailyAnimationDefinitions: Array<AnimationDefinition>;
 let switchUnitSystemFadeInAnimationDefinitions: Array<AnimationDefinition>;
 let switchUnitSystemFadeOutAnimationDefinitions: Array<AnimationDefinition>;
 
-export function navigatingTo(args: EventData) {
-    statusBar.hide();
-
+export function navigatingTo(args: NavigatedData) {
+    model = args.context;
+    
     var page = <Page>args.object;
     page.bindingContext = model;
-    model.loadRawData(0, 0).then(() => model.loadWeatherData());
+    model.loadWeatherData();
 
     hourlyContainer = page.getViewById<GridLayout>("hourly-forecast-container");
     dailyContainer = page.getViewById<GridLayout>("daily-forecast-container");
@@ -113,15 +113,23 @@ export function navigatingTo(args: EventData) {
     });
 }
 
-export function switchUnitSystem() {
+export function refreshData() {
     let fadeOutAnimation = new Animation(switchUnitSystemFadeOutAnimationDefinitions);
-    let fadeInAnimation =  new Animation(switchUnitSystemFadeInAnimationDefinitions);
+    let fadeInAnimation = new Animation(switchUnitSystemFadeInAnimationDefinitions);
+    
+    model.set("isLoadingIn", true);
+    geolocation.getCurrentLocation({ maximumAge: 10 * 60 * 1000 }).then((value) => {
+        Promise.all([fadeOutAnimation.play(), model.loadRawData(value.latitude, value.longitude)])
+            .then(() => {
+                fadeInAnimation.play();
+                model.loadWeatherData();
+            });
+    });    
+}
 
+export function switchUnitSystem() {
     model.switchUnitSystem();
-    Promise.all([fadeOutAnimation.play(), model.loadRawData(0,0)]).then(() => {
-        fadeInAnimation.play();
-        model.loadWeatherData();
-    });
+    refreshData()
 }
 
 export function onPointSelected(args: ChartEventData) {

@@ -1,0 +1,6 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded">
+    <GridLayout rows="*, auto, auto, *" columns="*, auto, *">
+        <Label row="1" col="1" text="&#xf00d;" class="wi spinning-sun" />
+        <Label id="loading-label" row="2" col="1" text="Loading..." />
+    </GridLayout>
+</Page>
