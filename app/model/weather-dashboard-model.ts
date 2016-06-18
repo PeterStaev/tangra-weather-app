@@ -1,7 +1,7 @@
 import * as observable from "data/observable";
 import * as http from "http";
 import * as moment from "moment";
-import settings = require("./shared/settings"); 
+import settings = require("../shared/settings"); 
 
 interface ICurrentConditionIcon {
     icon1: { text: string, color: string };

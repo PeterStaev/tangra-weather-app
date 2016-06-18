@@ -9,7 +9,7 @@ import { GridLayout } from "ui/layouts/grid-layout";
 import { Animation, AnimationDefinition } from "ui/animation";
 import { View } from "ui/core/view";
 import * as geolocation from "nativescript-geolocation";
-import { WeatherDashboardModel } from "./weather-dashboard-model";
+import { WeatherDashboardModel } from "../model/weather-dashboard-model";
 
 let model: WeatherDashboardModel;
 

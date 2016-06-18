@@ -2,7 +2,7 @@ import { EventData } from "data/observable";
 import * as statusBar from "nativescript-status-bar";
 import * as frame from "ui/frame";
 import * as geolocation from "nativescript-geolocation";
-import { WeatherDashboardModel } from "./weather-dashboard-model";
+import { WeatherDashboardModel } from "../model/weather-dashboard-model";
 
 let model = new WeatherDashboardModel();
 
@@ -28,7 +28,7 @@ function loadRawData() {
 
             model.loadRawData(value.latitude, value.longitude).then(() => {
                 frame.topmost().navigate({
-                    moduleName: "weather-dashboard",
+                    moduleName: "view/weather-dashboard",
                     transition: { name: "fade" },
                     clearHistory: true,
                     context: model

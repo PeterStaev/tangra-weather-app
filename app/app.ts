@@ -5,4 +5,4 @@ application.resources.dateFormat = (value: Date, format: string) => {
     return moment(value).format(format);
 };
 
-application.start({ moduleName: "landing-splash" });
+application.start({ moduleName: "view/landing-splash" });
