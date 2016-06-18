@@ -5,7 +5,7 @@
         "**/.svn": true,
         "**/.DS_Store": true, 
         "platforms": true, 
-        "app/*.js": true, 
-        "app/*.map": true
+        "app/**/*.js": true, 
+        "app/**/*.map": true
     }
 }

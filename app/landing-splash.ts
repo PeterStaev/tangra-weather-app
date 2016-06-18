@@ -21,18 +21,19 @@ export function pageLoaded(args: EventData) {
         geolocation.enableLocationRequest(false);
     }
 }
-
 function loadRawData() {
-    geolocation.getCurrentLocation({ maximumAge: 10 * 60 * 1000 }).then((value) => {
-        console.dump(value);
-        
-        model.loadRawData(value.latitude, value.longitude).then(() => {
-            frame.topmost().navigate({
-                moduleName: "weather-dashboard",
-                transition: { name: "fade" },
-                clearHistory: true,
-                context: model
-            } as frame.NavigationEntry);
-        });
-    });
+    geolocation.getCurrentLocation({ desiredAccuracy: 3000, timeout: 20000 })
+        .then((value) => {
+            console.dump(value);
+
+            model.loadRawData(value.latitude, value.longitude).then(() => {
+                frame.topmost().navigate({
+                    moduleName: "weather-dashboard",
+                    transition: { name: "fade" },
+                    clearHistory: true,
+                    context: model
+                } as frame.NavigationEntry);
+            });
+        })
+        .catch((e) => console.log(`ERROR: ${e}`));
 }

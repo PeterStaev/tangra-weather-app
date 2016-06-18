@@ -124,12 +124,13 @@ export function refreshData() {
     let fadeInAnimation = new Animation(switchUnitSystemFadeInAnimationDefinitions);
     
     model.set("isLoadingIn", true);
-    geolocation.getCurrentLocation({ maximumAge: 10 * 60 * 1000 }).then((value) => {
+    geolocation.getCurrentLocation({ desiredAccuracy: 3000, timeout: 20000 }).then((value) => {
         Promise.all([fadeOutAnimation.play(), model.loadRawData(value.latitude, value.longitude)])
             .then(() => {
                 fadeInAnimation.play();
                 model.loadWeatherData();
-            });
+            })
+            .catch((e) => console.log(`ERROR: ${e}`));
     });    
 }
 

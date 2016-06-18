@@ -1,6 +1,6 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" actionBarHidden="true" loaded="pageLoaded">
     <GridLayout rows="*, auto, auto, *" columns="*, auto, *">
-        <Label row="1" col="1" text="&#xf00d;" class="wi spinning-sun" />
-        <Label id="loading-label" row="2" col="1" text="Loading..." />
+        <Label id="slogan" row="1" col="0" colspan="3" text="The weather at your fingertips" />
+        <Label row="2" col="1" text="&#xf00d;" class="wi spinning-sun" />
     </GridLayout>
 </Page>

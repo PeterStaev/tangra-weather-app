@@ -19,7 +19,7 @@
             </AbsoluteLayout>
             <Label text="{{ currentTemperature }}" fontSize="80" />
             <Label id="degree-symbol"  class="wi" text="&#xf042;" />
-            <StackLayout verticalAlignment="top" paddingTop="10">
+            <StackLayout verticalAlignment="middle" marginLeft="5">
                 <Label class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'F' : 'C' }}" />
                 <Label class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'C' : 'F' }}" color="#888888" backgroundColor="transparent" tap="switchUnitSystem" />
             </StackLayout>
