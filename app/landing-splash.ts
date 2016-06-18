@@ -24,6 +24,8 @@ export function pageLoaded(args: EventData) {
 
 function loadRawData() {
     geolocation.getCurrentLocation({ maximumAge: 10 * 60 * 1000 }).then((value) => {
+        console.dump(value);
+        
         model.loadRawData(value.latitude, value.longitude).then(() => {
             frame.topmost().navigate({
                 moduleName: "weather-dashboard",

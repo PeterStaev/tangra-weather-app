@@ -2,6 +2,7 @@ import { EventData } from "data/observable";
 import { Page, NavigatedData } from "ui/page";
 import { ChartEventData, RadCartesianChart } from "nativescript-telerik-ui-pro/chart";
 import * as frame from "ui/frame";
+import * as statusBar from "nativescript-status-bar";
 import { GestureStateTypes, PinchGestureEventData } from "ui/gestures";
 import { SelectedIndexChangedEventData } from "ui/segmented-bar";
 import { GridLayout } from "ui/layouts/grid-layout";
@@ -23,7 +24,12 @@ let zoomInDailyAnimationDefinitions: Array<AnimationDefinition>;
 let switchUnitSystemFadeInAnimationDefinitions: Array<AnimationDefinition>;
 let switchUnitSystemFadeOutAnimationDefinitions: Array<AnimationDefinition>;
 
+export function pageLoaded() {
+    setTimeout(() => statusBar.hide(), 250);
+}
+
 export function navigatingTo(args: NavigatedData) {
+   
     model = args.context;
     
     var page = <Page>args.object;

@@ -1,8 +1,14 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:chart="nativescript-telerik-ui-pro/chart" class="{{ currentCondition }}" navigatingTo="navigatingTo">
-    <GridLayout rows="30, 80, auto, auto, auto, *, auto" columns="*, *, *">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" 
+    xmlns:chart="nativescript-telerik-ui-pro/chart" 
+    class="{{ currentCondition }}" 
+    actionBarHidden="true" 
+    navigatingTo="navigatingTo"
+    loaded="pageLoaded"
+    >
+    <GridLayout rows="40, auto, auto, auto, auto, *, auto" columns="*, *, *">
         <GridLayout row="0" col="0" colspan="3">
             <Label id="city-label" text="{{ city }}" />
-            <Button text="&#xf04c;" class="wi refresh-button" visibility="{{ isLoadingIn, isLoadingIn ? 'collapsed' : 'visible' }}" tap="refreshData" />
+            <Label text="&#xf04c;" class="wi refresh-button" visibility="{{ isLoadingIn, isLoadingIn ? 'collapsed' : 'visible' }}" tap="refreshData" />
             <Label text="&#xf00d;" class="wi refresh-button spinning-sun" visibility="{{ isLoadingIn, isLoadingIn ? 'visible' : 'collapsed' }}" />
         </GridLayout>
         
@@ -15,7 +21,7 @@
             <Label id="degree-symbol"  class="wi" text="&#xf042;" />
             <StackLayout verticalAlignment="top" paddingTop="10">
                 <Label class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'F' : 'C' }}" />
-                <Button class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'C' : 'F' }}" color="#999999" backgroundColor="transparent" tap="switchUnitSystem" />
+                <Label class="metric-symbol" text="{{ unitSystem, unitSystem === 'us' ? 'C' : 'F' }}" color="#888888" backgroundColor="transparent" tap="switchUnitSystem" />
             </StackLayout>
         </StackLayout>
        
@@ -50,9 +56,11 @@
         <GridLayout id="daily-forecast-container" row="5" col="0" colspan="3" rows="auto, auto, *">
             <Label row="0" text="Daily Forecast" fontSize="20" margin="5" />
             <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
-                <SegmentedBarItem title="Temperature" />
-                <SegmentedBarItem title="Precipitation" />
-                <SegmentedBarItem title="Humidity" />
+                <SegmentedBar.items>
+                    <SegmentedBarItem title="Temperature" />
+                    <SegmentedBarItem title="Precipitation" />
+                    <SegmentedBarItem title="Humidity" />
+                </SegmentedBar.items>
             </SegmentedBar> 
                    
             <chart:RadCartesianChart row="2" pointSelected="onPointSelected" class="{{ selectedChartIndex === 0 ? 'fadein-chart' : 'fadeout-chart' }}">
@@ -94,7 +102,7 @@
                         highPropertyName="temperatureMax"
                         selectionMode="DataPoint">
                         <chart:RangeBarSeries.labelStyle>
-                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i&#176;" />
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%d&#176;" />
                         </chart:RangeBarSeries.labelStyle>
                     </chart:RangeBarSeries>
                     
@@ -249,9 +257,11 @@
         <GridLayout id="hourly-forecast-container" row="5" col="0" colspan="3" rows="auto, auto, *" opacity="0" scaleX="0" scaleY="0" pinch="hourlyContainerZoomed" doubleTap="switchToDailyChart">
             <Label row="0" text="{{ currentDay, 'Hourly forecast for ' + dateFormat(currentDay, 'dddd') }}" fontSize="20" margin="5" />
             <SegmentedBar row="1" margin="0,5,5,5" selectedBackgroundColor="#FEFEFE" selectedIndex="{{ selectedChartIndex }}" selectedIndexChanged="switchCharts">
-                <SegmentedBarItem title="Temperature" />
-                <SegmentedBarItem title="Precipitation" />
-                <SegmentedBarItem title="Humidity" />
+                <SegmentedBar.items>
+                    <SegmentedBarItem title="Temperature" />
+                    <SegmentedBarItem title="Precipitation" />
+                    <SegmentedBarItem title="Humidity" />
+                </SegmentedBar.items>
             </SegmentedBar> 
             
             <chart:RadCartesianChart id="hourly-temperature-chart" row="2" class="{{ selectedChartIndex === 0 ? 'fadein-chart' : 'fadeout-chart' }}">
@@ -292,7 +302,7 @@
                         categoryProperty="time"
                         valueProperty="temperature">
                         <chart:AreaSeries.labelStyle>
-                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i&#176;" />
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%d&#176;" />
                         </chart:AreaSeries.labelStyle>
                     </chart:AreaSeries>
                 </chart:RadCartesianChart.series>

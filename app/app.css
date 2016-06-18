@@ -4,6 +4,12 @@
     color: #fefefe;
 }
 
+Button
+{
+    background-color: transparent;
+    padding: 0;
+}
+
 .wi
 {
     font-family: "Weather Icons";
