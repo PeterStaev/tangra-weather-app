@@ -188,13 +188,14 @@
                                 horizontalLocation="Left" 
                                 lineColor="#FEFEFE" 
                                 lineHidden="true" 
+                                labelFormat="%.0f%%"
                                 labelTextColor="#FEFEFE"
                                 labelLayoutMode="Outside"
                                 minimum="0"
                                 maximum="100" />
                         </chart:LineSeries.verticalAxis>
                         <chart:LineSeries.labelStyle>
-                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%.0f%%" />
+                            <chart:PointLabelStyle textColor="#FEFEFE" textFormat="%i%%" />
                         </chart:LineSeries.labelStyle>
                     </chart:LineSeries>
                 </chart:RadCartesianChart.series>

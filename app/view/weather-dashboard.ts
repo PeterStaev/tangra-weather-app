@@ -157,6 +157,7 @@ export function switchToDailyChart() {
 }
 
 export function hourlyContainerZoomed(args: PinchGestureEventData) {
+    console.log("pinch");
     let scale = Math.min(1, args.scale);
 
     dailyContainer.scaleX = 1 - scale;

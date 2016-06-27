@@ -172,8 +172,8 @@ export class WeatherDashboardModel extends observable.Observable {
                 temperatureMax: Math.round(item.temperatureMax),
                 icon: conditionIcons[item.icon],
                 humidity: item.humidity * 100,
-                precipProbability: item.precipProbability * 100,
-                precipIntensity: item.precipIntensity * (unitSystem === "us" ? 25.4 : 1) // in/hr is a very small number so we convert to mm/h
+                precipProbability: Math.round(item.precipProbability * 100),
+                precipIntensity: this._round(item.precipIntensity * (unitSystem === "us" ? 25.4 : 1), 2) // in/hr is a very small number so we convert to mm/h
             };
         }));
     }
@@ -203,8 +203,8 @@ export class WeatherDashboardModel extends observable.Observable {
                         time: moment.unix(item.time).toDate(),
                         temperature: Math.round(item.temperature),
                         humidity: item.humidity * 100,
-                        precipProbability: item.precipProbability * 100,
-                        precipIntensity: item.precipIntensity * (this.get("unitSystem") === "us" ? 25.4 : 1) // in/hr is a very small number so we convert to mm/h
+                        precipProbability: Math.round(item.precipProbability * 100),
+                        precipIntensity: this._round(item.precipIntensity * (this.get("unitSystem") === "us" ? 25.4 : 1) , 2)// in/hr is a very small number so we convert to mm/h
                     };
                 });
         this.set("hourly", hourlyData);
@@ -236,5 +236,11 @@ export class WeatherDashboardModel extends observable.Observable {
         if (moonPhase < 1) {
             return "Waning\nCrescent";
         }
+    }
+
+    private _round(num: number, precision: number): number {
+        let multiplier = Math.pow(10, precision);
+
+        return Math.round(num * multiplier) / multiplier
     }
 }
